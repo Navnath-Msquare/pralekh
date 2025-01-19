@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  baseURL: 'http://[::1]:3000/api/',
+  baseURL: 'http://localhost:3000/api/',
   testKeyId : 'rzp_test_WNng1yL47JloKB',
   testKeySecret: 'gN0Or2S0qTDYCwDmtznovjAE'
 };

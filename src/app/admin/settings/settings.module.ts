@@ -6,7 +6,7 @@ import { CompanyComponent } from './company/company.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { BannerComponent } from './banner/banner.component';
-
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
   declarations: [
@@ -18,7 +18,8 @@ import { BannerComponent } from './banner/banner.component';
     SettingsRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedModule
+    SharedModule,
+    NgSelectModule
   ]
 })
 export class SettingsModule { }
