@@ -1,0 +1,84 @@
+<!-- Start Breadcrumbs -->
+<app-breadcrumbs title="Users List" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+<!-- End Breadcrumbs -->
+
+<div class="row">
+  <div class="col-lg-12">
+      <div class="card"  id="tasksList">
+          <div class="card-header border-0">
+              <div class="d-flex align-items-center">
+                  <h5 class="card-title mb-0 flex-grow-1">All Users</h5>
+                  <div class="flex-shrink-0">
+                      
+                  </div>
+              </div>
+          </div>
+          <div class="card-body bg-soft-light border border-dashed border-start-0 border-end-0">
+            <form>
+                <div class="row g-3">
+                    <div class="col-xxl-5 col-sm-12">
+                        <div class="search-box">
+                            <input type="text"  name="searchTerm" class="form-control search bg-light border-light" placeholder="Search..." [(ngModel)]="searchTerm">
+                            <i class="ri-search-line search-icon"></i>
+                        </div>
+                    </div>
+                    <!--end col-->
+                    <div class="col-xxl-2 col-sm-6">
+                        <div class="input-light">
+                            <select class="form-control bg-light border-light" data-choices data-choices-search-false name="choices-single-default"  id="idStatus" [(ngModel)]="statusTerm">
+                                <option value="" selected>All</option>
+                                <option value="Active">Active</option>
+                                <option value="Inactive">Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <!--end row-->
+            </form>
+        </div>
+        <div class="card-body"  style="padding-top: 0.6rem;">
+              <div class="table-responsive table-card mb-2">
+                <table class="table" #table>
+                  <thead>
+                  <tr class="bg-light text-muted">
+                    <th scope="col" style="width: 10px;">
+                      <div class="form-check">
+                          <input class="form-check-input" type="checkbox" id="checkAll" value="option">
+                      </div>
+                  </th>
+                  <th class="sort" sortable="taskId">Sr. No.</th>
+                  <th class="sort" sortable="project">Name</th>
+                  <th class="sort" sortable="task">Email</th>
+                  <th class="sort" sortable="creater">Mobile</th>
+                  <th class="sort" sortable="subItem">Plan</th>
+                  <th class="sort" sortable="subItem">Joining Date</th>
+                  <th class="sort" sortable="subItem">Action</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let item of data |filter:searchTerm | filter:statusTerm;let i =index">
+                        <th scope="row" style="width: 10px;">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="checkAll" value="option1"
+                                    [(ngModel)]="item.isSelected">
+                            </div>
+                        </th>
+                        <td><a (click)="edit(item._id)" style="cursor: pointer;" class="fw-medium">#{{data.length - i}}</a></td>
+                        <td>{{item.user.name}}</td>
+                        <td>{{item.user.email}}</td>
+                        <td>{{item.user.mobile}}</td>
+                        <td class="assignedto">{{(item.subscription == undefined)?'-':item.subscription?.licenseId?.planId?.name}}</td>
+                        <td class="status">
+                            {{item.user.createdAt | date:'dd MMM, yyyy'}}
+                        </td>
+                        <td>
+                            <button class="btn btn-sm btn-dang" (click)="delete(i)"><i class="ri-delete-bin-line" style="cursor: pointer;"></i></button>
+                        </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+          </div><!--end card-body-->
+      </div><!--end card-->
+  </div><!--end col-->
+</div><!--end row-->

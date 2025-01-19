@@ -1,0 +1,115 @@
+<!-- Start Breadcrumbs -->
+<app-breadcrumbs title="Areas List" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+<!-- End Breadcrumbs -->
+
+<div class="row">
+  <div class="col-lg-12">
+      <div class="card"  id="tasksList">
+          <div class="card-header border-0">
+              <div class="d-flex align-items-center">
+                  <h5 class="card-title mb-0 flex-grow-1">All Areas</h5>
+                  <div class="flex-shrink-0">
+                      
+                  </div>
+              </div>
+          </div>
+          <div class="card-body bg-soft-light border border-dashed border-start-0 border-end-0">
+            <form>
+                <div class="row g-3">
+                    <div class="col-xxl-5 col-sm-12">
+                       <ng-select (change)="onChangeState($event)">
+                           <ng-option value="" disabled>Select State</ng-option>
+                           <ng-option value="ANDAMAN AND NICO.IN.">ANDAMAN AND NICO.IN.</ng-option>
+                           <ng-option value="ANDHRA PRADESH">ANDHRA PRADESH</ng-option>
+                           <ng-option value="ARUNACHAL PRADESH">ARUNACHAL PRADESH</ng-option>
+                           <ng-option value="ASSAM">ASSAM</ng-option>
+                           <ng-option value="BIHAR">BIHAR</ng-option>
+                           <ng-option value="CHANDIGARH">CHANDIGARH</ng-option>
+                           <ng-option value="CHATTISGARH">CHATTISGARH</ng-option>
+                           <ng-option value="DADRA AND NAGAR HAV.">DADRA AND NAGAR HAV.</ng-option>
+                           <ng-option value="DAMAN AND DIU">DAMAN AND DIU</ng-option>
+                           <ng-option value="DELHI">DELHI</ng-option>
+                           <ng-option value="GOA">GOA</ng-option>
+                           <ng-option value="GUJARAT">GUJARAT</ng-option>
+                           <ng-option value="HARYANA">HARYANA</ng-option>
+                           <ng-option value="HIMACHAL PRADESH">HIMACHAL PRADESH</ng-option>
+                           <ng-option value="JAMMU AND KASHMIR">JAMMU AND KASHMIR</ng-option>
+                           <ng-option value="JHARKHAND">JHARKHAND</ng-option>
+                           <ng-option value="KARNATAKA">KARNATAKA</ng-option>
+                           <ng-option value="KERALA">KERALA</ng-option>
+                           <ng-option value="LAKSHADWEEP">LAKSHADWEEP</ng-option>
+                           <ng-option value="MADHYA PRADESH">MADHYA PRADESH</ng-option>
+                           <ng-option value="MAHARASHTRA">MAHARASHTRA</ng-option>
+                           <ng-option value="MANIPUR">MANIPUR</ng-option>
+                           <ng-option value="MEGHALAYA">MEGHALAYA</ng-option>
+                           <ng-option value="MIZORAM">MIZORAM</ng-option>
+                           <ng-option value="NAGALAND">NAGALAND</ng-option>
+                           <ng-option value="ODISHA">ODISHA</ng-option>
+                           <ng-option value="PONDICHERRY">PONDICHERRY</ng-option>
+                           <ng-option value="PUNJAB">PUNJAB</ng-option>
+                           <ng-option value="RAJASTHAN">RAJASTHAN</ng-option>
+                           <ng-option value="SIKKIM">SIKKIM</ng-option>
+                           <ng-option value="TAMIL NADU">TAMIL NADU</ng-option>
+                           <ng-option value="TELANGANA">TELANGANA</ng-option>
+                           <ng-option value="TRIPURA">TRIPURA</ng-option>
+                           <ng-option value="UTTAR PRADESH">UTTAR PRADESH</ng-option>
+                           <ng-option value="UTTARAKHAND">UTTARAKHAND</ng-option>
+                           <ng-option value="WEST BENGAL">WEST BENGAL</ng-option>
+                       </ng-select>
+                    </div>
+                    <!--end col-->
+                </div>
+                <!--end row-->
+            </form>
+        </div>
+          <div *ngIf="data.length > 0" class="card-body bg-soft-light border border-dashed border-start-0 border-end-0">
+            <form>
+                <div class="row g-3">
+                    <div class="col-xxl-5 col-sm-12">
+                        <div class="search-box">
+                            <input type="text"  name="searchTerm" class="form-control search bg-light border-light" placeholder="Search..." [(ngModel)]="searchTerm">
+                            <i class="ri-search-line search-icon"></i>
+                        </div>
+                    </div>
+                    <!--end col-->
+                    <div class="col-xxl-2 col-sm-6">
+                        <!-- <div class="input-light">
+                            <select class="form-control bg-light border-light" data-choices data-choices-search-false name="choices-single-default"  id="idStatus" [(ngModel)]="statusTerm">
+                                <option value="" selected>All</option>
+                                <option value="Active">Active</option>
+                                <option value="Inactive">Inactive</option>
+                            </select>
+                        </div> -->
+                    </div>
+                </div>
+                <!--end row-->
+            </form>
+        </div>
+        <div *ngIf="data.length > 0" class="card-body"  style="padding-top: 0.6rem;">
+              <div class="table-responsive table-card mb-2">
+                <table class="table" #table>
+                  <thead>
+                  <tr class="bg-light text-muted">
+                  <th class="sort" sortable="project">Pincode</th>
+                  <th class="sort" sortable="task">State</th>
+                  <th class="sort" sortable="creater">Status</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let data of data |filter:searchTerm ;let i =index">
+                        <td>{{data.pincode}}</td>
+                        <td>{{data.state}}</td>
+                        <td>
+                            <div dir="ltr" class="form-check form-switch form-switch-success form-switch-lg">
+                                <input type="checkbox" id="customSwitchsizelg" [checked]="data.status == 'Active'" (change)="changeStatus(data._id,$event)" class="form-check-input">
+                                
+                            </div>
+                        </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+          </div><!--end card-body-->
+      </div><!--end card-->
+  </div><!--end col-->
+</div><!--end row-->

@@ -1,0 +1,274 @@
+<app-breadcrumbs title="Own Information" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+<div class="row">
+    <div class="col-xxl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12">
+        <div class="card">
+            <div class="card-body p-4">
+                <div>
+                    
+                    <div class="mt-2 text-center">
+                        <h5 class="mb-1">{{(this.userData.name  != "") ? this.userData.name:this.userData.name }}</h5>
+                        <p class="text-muted">Since {{this.userData.createdAt | date:'MMM yyyy'}}</p>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table mb-0 table-borderless">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <small class="fw-light">Agent Name</small> <br>
+                                        {{(userData.name != "" && userData.name != 0 && userData.name != undefined) ? userData.name: "-"}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <small class="fw-light">Mobile</small> <br>
+                                        {{(userData.mobile != "" && userData.mobile != 0 && userData.mobile != undefined) ? userData.mobile: "-"}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <small class="fw-light">Email</small> <br>
+                                        {{(userData.email != "" && userData.email != 0 && userData.email != undefined) ? userData.email: "-"}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <small class="fw-light">Address</small> <br>
+                                        {{(userData.address != "" && userData.address != 0 && userData.address != undefined) ? userData.address: "-"}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <small class="fw-light">Region</small> <br>
+                                        {{(userData.region != "" && userData.region != 0 && userData.region != undefined) ? userData.region: "-"}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <small class="fw-light">Commission (%)</small> <br>
+                                        {{(userData.commission != "" && userData.commission != 0 && userData.commission != undefined) ? userData.commission + '%': "0%"}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <small class="fw-light">Target</small> <br>
+                                        {{(userData.target != "" && userData.target != 0 && userData.target != undefined) ? "Rs. "+userData.target: "Rs. 0"}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <small class="fw-light">Status</small> <br>
+                                        {{(userData.status != "" && userData.status != 0 && userData.status != undefined) ? userData.status: "-"}}
+                                    </td>
+                                    
+                                </tr>
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-9 col-lg-9 col-md-9 col-sm-12 col-xs-12">
+        <div class="card">
+            <div class="card-header border-0 align-items-center d-flex">
+                <h4 class="card-title mb-0 flex-grow-1">Revenue</h4>
+                <!-- <div class="d-flex gap-1">
+                    <button type="button" class="btn btn-sm" (click)="changeRevenuePeriod('All')" [class]="(revenuePeriod == 'All') ? 'btn-primary':'btn-outline-secondary'"> ALL </button>
+                    <button type="button" class="btn btn-sm" (click)="changeRevenuePeriod('1Y')" [class]="(revenuePeriod == '1Y') ? 'btn-primary':'btn-outline-secondary'"> 1Y </button>
+                    <button type="button" class="btn btn-sm" (click)="changeRevenuePeriod('6M')" [class]="(revenuePeriod == '6M') ? 'btn-primary':'btn-outline-secondary'"> 6M </button>
+                    <button type="button" class="btn btn-sm" (click)="changeRevenuePeriod('1M')" [class]="(revenuePeriod == '1M') ? 'btn-primary':'btn-outline-secondary'"> 1M </button>
+                </div> -->
+            </div>
+            <div class="card-header p-0 border-0 bg-soft-light">
+                <div class="row g-0 text-center">
+                    <div class="col">
+                        <div class="p-3 border border-dashed border-start-0 border-bottom-0">
+                            <h5 class="mb-1"><span
+                                    class="counter-value">{{services.length}}</span></h5>
+                            <p class="text-muted mb-0">Total <br>Services</p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="p-3 border border-dashed border-start-0 border-bottom-0">
+                            <h5 class="mb-1">₹ <span
+                                    class="counter-value">{{saleAmount}}</span></h5>
+                            <p class="text-muted mb-0">Total <br>Sales</p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="p-3 border border-dashed border-start-0 border-bottom-0">
+                            <h5 class="mb-1">₹ <span
+                                    class="counter-value">{{commissionAmount}}</span></h5>
+                            <p class="text-muted mb-0">Commission<br>   &nbsp;</p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="p-3 border border-dashed border-start-0 border-bottom-0">
+                            <h5 class="mb-1 text-success"><span
+                                    class="counter-value">₹ {{settlementAmount}}</span></h5>
+                            <p class="text-muted mb-0">Settelement Completed</p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="p-3 border border-dashed border-start-0 border-bottom-0 border-end-0">
+                            <h5 class="mb-1 text-warning"><span
+                                    class="counter-value">₹ {{commissionAmount - settlementAmount}}</span></h5>
+                            <p class="text-muted mb-0">Settelement <br>Pending</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <div class="input-group">
+                    <input class="form-control flatpickr-input" type="text" mwlFlatpickr (change)="changeDate($event)" [altInput]="true" [convertModelValue]="true" mode="range">
+                    <div class="input-group-text bg-primary border-primary text-white"><i class="ri-calendar-2-line"></i></div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div>
+                    <h4 class="card-title mb-3 flex-grow-1">Services</h4>
+                    <div class="table-responsive table-card mb-2">
+                        <table class="table" #table>
+                            <thead>
+                                <tr class="bg-light text-muted">
+                                    <th>Sr. No.</th>
+                                    <th scope="col">Service</th>
+                                    <th scope="col">User</th>
+                                    <th scope="col">Price</th>
+                                    <th scope="col">Commission</th>
+                                    <th scope="col">Commission Settlement</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of services;let i = index;">
+                                    <td><b>{{i+1}}</b></td>
+                                    <td>{{(item.serviceId.serviceType == 1)?item.servicePackageId?.name:item.subServiceId?.name}}</td>
+                                    <td>{{item?.userId?.name}}</td>
+                                    <td>Rs. {{(item.serviceId.serviceType == 1)?item.servicePackageId?.cost:item.subServiceId?.cost}}</td>
+                                    <td>Rs. {{(item.serviceId.serviceType == 1)?(item.servicePackageId?.cost * (userData.commission/100)).toFixed(2):(item.subServiceId?.cost * (userData.commission/100)).toFixed(2)}}</td>
+                                    <td>{{(item.commissionData)?'Completed':'Pending'}}<br>
+                                        <a class="fw-medium" *ngIf="!item.commissionData && item.isRequested">Requested</a>
+                                        <a class="fw-medium" style="cursor: pointer;" *ngIf="!item.commissionData && !item.isRequested" (click)="request(i)">Request</a>
+                                    <a class="fw-medium" style="cursor: pointer;" *ngIf="item.commissionData" (click)="openViewModal(commissionModal, i)">View</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="card-title mb-3 flex-grow-1">Plans</h4>
+                    <div class="table-responsive table-card mb-2">
+                        <table class="table" #table1>
+                            <thead>
+                                <tr class="bg-light text-muted">
+                                    <th>Sr. No.</th>
+                                    <th scope="col">Plan</th>
+                                    <th scope="col">User</th>
+                                    <th scope="col">Price</th>
+                                    <th scope="col">Commission</th>
+                                    <th scope="col">Commission Settlement</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of plans;let i = index;">
+                                    <td><b>{{i+1}}</b></td>
+                                    <td>{{item.planId?.name}}</td>
+                                    <td>{{item?.userId?.name}}</td>
+                                    <td>Rs. {{item.planId?.amount}}</td>
+                                    <td>Rs. {{(item.planId?.amount * (userData.commission/100)).toFixed(2)}}</td>
+                                    <td>{{(item.commissionData)?'Completed':'Pending'}}<br>
+                                        <a class="fw-medium" *ngIf="!item.commissionData && item.isRequested">Requested</a>
+                                        <a class="fw-medium" style="cursor: pointer;" *ngIf="!item.commissionData && !item.isRequested" (click)="requestPlan(i)">Request</a>
+                                    <a class="fw-medium" style="cursor: pointer;" *ngIf="item.commissionData" (click)="openPlanViewModal(commissionPlanModal, i)">View</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #commissionModal role="document" let-modal>
+    <div class="modal-content border-0">
+        <div class="modal-header p-3 ps-4 bg-soft-warning">
+            <h5 class="modal-title" id="inviteMembersModalLabel">{{(view)?'Commission Details':'Settle Commission'}}</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="modal.dismiss('Cross click');clear()"></button>
+        </div>
+        <div class="modal-body p-4">
+            <div class="mb-3">
+                <label class="form-label">Amount</label>
+                <input type="text" class="form-control" placeholder="Enter Amount" disabled=""
+                    value="Rs. {{selectedSettlement}}">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Payment Method</label>
+                <input type="text" class="form-control" [disabled]="view" placeholder="Enter Payment Method"
+                    [(ngModel)]="transactionNo" [ngModelOptions]="{standalone: true}">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Reference Document</label>
+                <input  type="file" style="margin-bottom:5px" [disabled]="view" class="form-control"  accept="image/*" 
+                        (change)="uploadDoc($event);" >
+                <a *ngIf="referenceDocument != ''" href="{{baseURL}}retrieve/{{referenceDocument}}" target="_blank">View Reference Document</a>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Paid To</label>
+                <input type="text" class="form-control" [disabled]="view" placeholder="Enter Paid To"
+                    [(ngModel)]="paidTo" [ngModelOptions]="{standalone: true}">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-light w-xs" data-bs-dismiss="modal" (click)="modal.close('Close click');clear()">Cancel</button>
+            <button type="button" *ngIf="!view" class="btn btn-primary w-xs" (click)="settle()">Submit</button>
+        </div>
+    </div>
+    <!-- end modal-content -->
+  </ng-template>
+
+  <ng-template #commissionPlanModal role="document" let-modal>
+    <div class="modal-content border-0">
+        <div class="modal-header p-3 ps-4 bg-soft-warning">
+            <h5 class="modal-title" id="inviteMembersModalLabel">{{(view)?'Commission Details':'Settle Commission'}}</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="modal.dismiss('Cross click');clear()"></button>
+        </div>
+        <div class="modal-body p-4">
+            <div class="mb-3">
+                <label class="form-label">Amount</label>
+                <input type="text" class="form-control" placeholder="Enter Amount" disabled=""
+                    value="Rs. {{selectedPlanSettlement}}">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Payment Method</label>
+                <input type="text" class="form-control" [disabled]="view" placeholder="Enter Payment Method"
+                    [(ngModel)]="transactionNo" [ngModelOptions]="{standalone: true}">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Reference Document</label>
+                <input  type="file" style="margin-bottom:5px" [disabled]="view" class="form-control"  accept="image/*" 
+                        (change)="uploadDoc($event);" >
+                <a *ngIf="referenceDocument != ''" href="{{baseURL}}retrieve/{{referenceDocument}}" target="_blank">View Reference Document</a>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Paid To</label>
+                <input type="text" class="form-control" [disabled]="view" placeholder="Enter Paid To"
+                    [(ngModel)]="paidTo" [ngModelOptions]="{standalone: true}">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-light w-xs" data-bs-dismiss="modal" (click)="modal.close('Close click');clear()">Cancel</button>
+            <button type="button" *ngIf="!view" class="btn btn-primary w-xs" (click)="settle()">Submit</button>
+        </div>
+    </div>
+    <!-- end modal-content -->
+  </ng-template>

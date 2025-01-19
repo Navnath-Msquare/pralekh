@@ -1,0 +1,81 @@
+<!-- Start Breadcrumbs -->
+<app-breadcrumbs title="Delivery Report" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+<!-- End Breadcrumbs -->
+
+<div class="row">
+  <div class="col-lg-12">
+      <div class="card"  id="tasksList">
+          <div class="card-header border-0">
+              <div class="d-flex align-items-center">
+                  <h5 class="card-title mb-0 flex-grow-1">All Assign Deliveries</h5>
+                  <div class="flex-shrink-0">
+                      
+                  </div>
+              </div>
+          </div>
+          <div class="card-body bg-soft-light border border-dashed border-start-0 border-end-0">
+            <form>
+                <div class="row g-3">
+                    <div class="col-xxl-5 col-sm-12">
+                        <div class="search-box">
+                            <input type="text"  name="searchTerm" class="form-control search bg-light border-light" placeholder="Search..." [(ngModel)]="searchTerm">
+                            <i class="ri-search-line search-icon"></i>
+                        </div>
+                    </div>
+                    <!--end col-->
+                    <div class="col-xxl-2 col-sm-6">
+                        <!-- <div class="input-light">
+                            <select class="form-control bg-light border-light" data-choices data-choices-search-false name="choices-single-default"  id="idStatus" [(ngModel)]="statusTerm">
+                                <option value="" selected>All</option>
+                                <option value="Pending">Pending</option>
+                                <option value="Completed">Completed</option>
+                            </select>
+                        </div> -->
+                    </div>
+                    <div class="col-xxl-5 col-sm-6 text-end">
+                        
+                    </div>
+                </div>
+                <!--end row-->
+            </form>
+        </div>
+        <div class="card-body"  style="padding-top: 0.6rem;">
+              <div class="table-responsive table-card mb-2">
+                <table class="table" #table>
+                  <thead>
+                  <tr class="bg-light text-muted">
+                  <th class="sort" sortable="taskId">Sr. No.</th>
+                  <th class="sort" sortable="project">Name</th>
+                  <th class="sort" sortable="task">Email</th>
+                  <th class="sort" sortable="creater">Mobile</th>
+                  <th class="sort" sortable="subItem" style="width: 150px;">Pickup Address</th>
+                  <th class="sort" sortable="subItem" style="width: 150px;">Delivery Address</th>
+                  <th class="sort" sortable="subItem">Task</th>
+                  <th class="sort" sortable="subItem">Status</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let data of data |filter:searchTerm | filter:statusTerm;let i =index">
+                        <td><a style="cursor: pointer;" class="fw-medium">#{{i+1}}</a></td>
+                        <td>{{data.deliveryPartner?.name}}</td>
+                        <td>{{data.deliveryPartner?.email}}</td>
+                        <td>{{data.deliveryPartner?.mobile}}</td>
+                        <td class="status" style="width: 150px;">
+                            {{data.pickupAddress}}, {{data.pickupCity}}, {{data.pickupState}} - {{data.pickupPincode}}
+                        </td>
+                        <td class="status" style="width: 150px;">
+                            {{data.dropAddress}}, {{data.dropCity}}, {{data.dropState}} - {{data.dropPincode}}
+                        </td>
+                        <td><div *ngFor="let item of data.tasks;let index= index"><a>{{item.task}}</a><span *ngIf="index != (data.tasks.length -1)">,</span></div></td>
+                        <td class="status">
+                            <div class="badge badge-soft-warning " *ngIf="data.status == 'Pending'">Pending</div>
+                            <div class="badge badge-soft-success " *ngIf="data.status == 'Completed'">Completed</div>
+                        </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+          </div><!--end card-body-->
+      </div><!--end card-->
+  </div><!--end col-->
+</div><!--end row-->

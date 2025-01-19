@@ -1,0 +1,103 @@
+<app-breadcrumbs title="Distributor Details" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+<div class="row">
+    <div class="col-xxl-7">
+        <div class="card card-height-100">
+            <div class="card-header align-items-center d-flex">
+                <h4 class="card-title mb-0 flex-grow-1"> <i class="ri-arrow-go-back-fill" style="cursor:pointer; margin-right: 10px;"
+                    [routerLink]="['/admin/distributors']"></i>Pincodes</h4>
+                <!-- <div class="flex-shrink-0">
+                    <div class="dropdown card-header-dropdown" ngbDropdown>
+                        <a class="text-reset dropdown-btn arrow-none" href="javascript:void(0);" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ngbDropdownToggle>
+                           <span class="text-muted fs-16"><i class="mdi mdi-dots-vertical align-middle"></i></span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
+                            <a class="dropdown-item" href="javascript:void(0);">Today</a>
+                            <a class="dropdown-item" href="javascript:void(0);">Last Week</a>
+                            <a class="dropdown-item" href="javascript:void(0);">Last Month</a>
+                            <a class="dropdown-item" href="javascript:void(0);">Current Year</a>
+                        </div>
+                    </div>
+                </div> -->
+            </div><!-- end card header -->
+            <div class="card-body">
+                <div class="table-responsive table-card">
+                    <table class="table align-middle table-borderless table-centered table-nowrap mb-0" #table>
+                        <thead class="text-muted table-light">
+                            <tr>
+                                <th scope="col" style="width: 10px;">Sr. No.</th>
+                                <th scope="col" class="text-center">Pincode</th>
+                                <th scope="col" class="text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let data of pincodesData;let i=index">
+                                <td>
+                                    <a href="javascript:void(0);">{{i+1}}</a>
+                                </td>
+                                <td class="text-center">{{data.pincode}}</td>
+                                <td class="text-center">
+                                    <button class="btn btn-sm btn-dang" (click)="delete(i)"><i class="ri-delete-bin-line"></i></button>
+                                </td>
+                            </tr><!-- end -->
+                        </tbody><!-- end tbody -->
+                    </table><!-- end table -->
+                </div><!-- end -->
+            </div><!-- end cardbody -->
+        </div><!-- end card -->
+        
+    </div> <!-- end col-->
+    <div class="col-xxl-5">
+        <div class="card bg-soft-warning" >
+            <div class="card-body p-0">
+
+                <div class="row align-items-end">
+                    <div class="col-sm-8">
+                        <div class="p-3">
+                            <p class="fs-16 lh-base">Add pincodes for getting multiple service enquiries.</p>
+                            <div class="mt-3">
+                                <a (click)="openModal(content)" class="btn btn-success">Add Pincode!</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="px-3">
+                            <img src="assets/images/user-illustarator-2.png" class="img-fluid" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div> <!-- end card-body-->
+        </div>
+    </div>
+</div>
+
+<ng-template #content role="document" let-modal>
+    <div class="modal-content border-0">
+        <div class="modal-header p-3 ps-4 bg-soft-warning">
+            <h5 class="modal-title" id="inviteMembersModalLabel">Add Pincode</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="modal.dismiss('Cross click');clear()"></button>
+        </div>
+        <div class="modal-body p-4">
+            <div class="input-group">
+                <input type="number" class="form-control" placeholder="Enter Pincode" [(ngModel)]="pincode">
+                <button class="btn btn-primary" type="button" id="button-addon2" (click)="addPincode()"><i class="ri-add-line"></i></button>
+            </div>
+            <ngx-simplebar class="mx-n4 px-4 mt-3" data-simplebar style="max-height: 225px;">
+                <div class="vstack gap-3">
+                    <div class="d-flex align-items-center" *ngFor="let item of pincodes;let i =index">
+                        <div class="flex-grow-1">
+                            <h5 class="fs-13 mb-0"><a href="javascript:void(0);" class="text-body d-block">{{item.pincode}}</a></h5>
+                        </div>
+                        <div class="flex-shrink-0">
+                            <button type="button" class="btn btn-light btn-sm" (click)="deletePincode(i)">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </ngx-simplebar>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-light w-xs" data-bs-dismiss="modal" (click)="modal.close('Close click');clear()">Cancel</button>
+            <button type="button" class="btn btn-primary w-xs" (click)="purchase()">Add</button>
+        </div>
+    </div>
+    <!-- end modal-content -->
+  </ng-template>

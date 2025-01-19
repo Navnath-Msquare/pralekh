@@ -1,0 +1,45 @@
+/* You can add global styles to this file, and also import other style files */
+.flatpickr-wrapper {
+    width: 100% !important;
+}
+::-webkit-scrollbar,
+*::-webkit-scrollbar {
+  display: none;
+}
+p{
+    margin-bottom: unset !important;
+}
+
+body { --ck-z-default: 100; --ck-z-modal: calc( var(--ck-z-default) + 999 ); }
+
+.btn-danger{
+  background-color: rgb(222,193,83) !important;
+  border-color: rgb(222,193,83) !important;
+  color: black !important;
+}
+
+.btn-primary{
+  background-color: rgb(16,15,127) !important;
+  border-color: rgb(16,15,127) !important;
+}
+
+.ck.ck-editor{
+  border: 1px solid #e0e0e0 !important;
+  border-radius: 0.25rem;
+}
+
+.ck-rounded-corners .ck.ck-editor__top .ck-sticky-panel .ck-toolbar{
+  border: unset !important;
+  border-radius: unset !important;
+  border-top-left-radius: 0.25rem !important;
+  border-top-right-radius: 0.25rem !important;
+}
+.ck .ck-editor__main{
+  height: 100px;
+  overflow: auto;
+  border-bottom-left-radius: 0.25rem;
+  border-bottom-right-radius: 0.25rem;
+}
+.ck.ck-editor__main>.ck-editor__editable:not(.ck-focused){
+  border:unset !important;
+}

@@ -1,0 +1,130 @@
+<!-- Start Breadcrumbs -->
+<app-breadcrumbs title="Special Packages List" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+<!-- End Breadcrumbs -->
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card" *ngIf="create">
+        <div class="card-header">
+            <!-- <i class="ri-arrow-go-back-fill" style="cursor:pointer; margin-right: 10px;"
+                [routerLink]="['/admin/distributors']"></i> -->
+            <span class="card-title mb-0" *ngIf="!editS">Create Special Package</span>
+            <span class="card-title mb-0" *ngIf="editS">Edit Special Package</span>
+        </div><!-- end card header -->
+        <div class="card-body">
+            <div class="row">
+                <div class="col-lg-12 border-right" >
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <div class="mb-3">
+                                <label class="form-label">Banner</label>
+                                <input  type="file" style="margin-bottom:5px" class="form-control"  accept="image/*" 
+                                    (change)="uploadDoc($event);" >
+                                    <a *ngIf="banner != ''" href="{{baseURL}}retrieve/{{banner}}" target="_blank">View Banner</a>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="mb-3">
+                                <label class="form-label">Price</label>
+                                <input  type="text" class="form-control" placeholder="Enter Name"
+                                    [(ngModel)]="price" [ngModelOptions]="{standalone: true}">
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label class="form-label">Services</label>
+                                <ng-select [(ngModel)]="selectedServices" [items]="services" [multiple]="true" bindLabel="name" bindValue="_id"
+                                groupBy="serviceTypeName" [closeOnSelect]="false">
+                                </ng-select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <button type="button" style="float: right; margin-left: 10px;"  class="btn btn-light waves-effect waves-light" (click)="clearFilter()"
+            >Close </button>
+                
+            <button type="button" style="float: right;" class="btn btn-primary waves-effect waves-light" (click)="submit()"
+                [disabled]="submitLoader" *ngIf="!editS">Create Special Package <i class="fa fa-circle-o-notch fa-spin" *ngIf="submitLoader"
+                    style="margin-left: 10px;"></i></button>
+            <button type="button" style="float: right;" class="btn btn-primary waves-effect waves-light" (click)="submit()"
+                    [disabled]="submitLoader"*ngIf="editS">Edit Special Package <i class="fa fa-circle-o-notch fa-spin" *ngIf="submitLoader"
+                        style="margin-left: 10px;"></i></button>
+            
+        </div>
+    </div>
+      <div class="card"  id="tasksList">
+          <div class="card-header border-0">
+              <div class="d-flex align-items-center">
+                  <h5 class="card-title mb-0 flex-grow-1">All Special Packages</h5>
+                  <div class="flex-shrink-0">
+                      
+                  </div>
+              </div>
+          </div>
+          <div class="card-body bg-soft-light border border-dashed border-start-0 border-end-0">
+            <form>
+                <div class="row g-3">
+                    <div class="col-xxl-5 col-sm-12">
+                        <div class="search-box">
+                            <input type="text"  name="searchTerm" class="form-control search bg-light border-light" placeholder="Search..." [(ngModel)]="searchTerm">
+                            <i class="ri-search-line search-icon"></i>
+                        </div>
+                    </div>
+                    <!--end col-->
+                    <div class="col-xxl-2 col-sm-6">
+                        <div class="input-light">
+                            <select class="form-control bg-light border-light" data-choices data-choices-search-false name="choices-single-default"  id="idStatus" [(ngModel)]="statusTerm">
+                                <option value="" selected>All</option>
+                                <option value="Active">Active</option>
+                                <option value="Inactive">Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-xxl-5 col-sm-6 text-end">
+                        <button class="btn btn-danger add-btn" (click)="create =true;"><i class="ri-add-line align-bottom me-1"></i> Create Special Package</button>
+                    </div>
+                </div>
+                <!--end row-->
+            </form>
+        </div>
+        <div class="card-body"  style="padding-top: 0.6rem;">
+              <div class="table-responsive table-card mb-2">
+                <table class="table" #table>
+                  <thead>
+                  <tr class="bg-light text-muted">
+                    <th scope="col" style="width: 10px;">
+                      <div class="form-check">
+                          <input class="form-check-input" type="checkbox" id="checkAll" value="option">
+                      </div>
+                  </th>
+                  <th class="sort" style="width: 50px;" sortable="taskId">Sr. No.</th>
+                  <th class="sort" sortable="project">Banner</th>
+                  <th class="sort" sortable="task">Price</th>
+                  <th class="sort" sortable="task">Services</th>
+                  <th>Action</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let data of data |filter:searchTerm | filter:statusTerm;let i =index">
+                        <th scope="row" style="width: 10px;">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="checkAll" value="option1"
+                                    [(ngModel)]="data.isSelected">
+                            </div>
+                        </th>
+                        <td style="width: 50px;" ><a (click)="edit(i)" style="cursor: pointer;" class="fw-medium">#{{i+1}}</a></td>
+                        <td><a href="{{baseURL}}retrieve/{{data.banner}}" target="_blank">View Banner</a></td>
+                        <td>Rs. {{data.price}}</td>
+                        <td> <div class="mt-1" *ngFor="let item of data.services;let i =index">{{i+1}}. {{item.name}}</div></td>
+                        <td><a class="btn btn-sm btn-dang" (click)="delete(data._id)"><i class="ri-delete-bin-line"></i></a></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+          </div><!--end card-body-->
+      </div><!--end card-->
+  </div><!--end col-->
+</div><!--end row-->
