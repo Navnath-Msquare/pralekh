@@ -61,12 +61,13 @@ export class BannerComponent implements OnInit {
     this.editS = true;
     this.banner = this.data[i].banner;
     this.bannerId = this.data[i]._id;
+    this.selectedServices = this.data[i]?.servicesId._id;
   }
 
   private _fetchData() {
     this.data = [];
     this.api.getAllBanner().subscribe(data => {
-      this.data = data.data;
+      this.data = data.data; 
       setTimeout(() => {
         if (!this.dataTable) {
           this.dataTable = $(this.table.nativeElement);
