@@ -50,7 +50,7 @@ export class DetailsComponent implements OnInit {
   ngOnInit(): void {
     this.breadCrumbItems = [
       { label: 'Home' },
-      { label: 'Distributors'},
+      { label: 'Partners'},
       { label: "Details", active:true}
     ];
 
@@ -180,36 +180,66 @@ export class DetailsComponent implements OnInit {
       this.loading = true;
       this.api.getEnquiryByVendorAndDate(this.distributorId,date1,date2).subscribe(async res=>{
         console.log(res);
-        const servicePromises = res.data.map(async (res: any) => {
-          res.commissionData = (await this.api.getAllCommissionByEnquiry(res._id).toPromise()).data[0];
+        const dataItems = res && res.data ? res.data : [];
+        const servicePromises = dataItems.map(async (resItem: any) => {
+          try {
+            let commRes = await this.api.getAllCommissionByEnquiry(resItem._id).toPromise();
+            resItem.commissionData = commRes && commRes.data && commRes.data.length > 0 ? commRes.data[0] : null;
+          } catch (err) {
+            console.error('Error fetching commission for enquiry ' + resItem._id, err);
+            resItem.commissionData = null;
+          }
         });
         await Promise.all(servicePromises);
-        this.services = res.data;
+        this.services = dataItems;
         console.log(this.services)
         setTimeout(() => {
           console.log(this.dataTable)
-          // if(!this.dataTable){
+          if(this.table && this.table.nativeElement){
             this.dataTable = $(this.table.nativeElement);
             this.dataTable.DataTable({
               "searching":   false,
               "lengthChange": false,
               "info":     false
             });
-          // }
+          }
           
         }, 500);
-        this.commissionAmount = this.services.reduce((total:any, aData:any) => ((total*1) + ((parseFloat((((aData.serviceId?.serviceType == 1)?aData.servicePackageId?.cost:aData.subServiceId?.cost) * (this.userData.commission /100)).toFixed(2)) || 0)*1)).toFixed(2), 0);
-        this.settlementAmount = this.services.reduce((total:any, aData:any) => ((total*1) + ((aData.commissionData?.amount) || 0)*1).toFixed(2), 0);
-        this.saleAmount = this.services.reduce((total:any, aData:any) => (((total*1)) + (((aData.serviceId?.serviceType == 1)?aData.servicePackageId?.cost:aData.subServiceId?.cost) || 0)*1), 0);
+        const commissionPercent = (this.userData?.commission || 0) / 100;
+        this.commissionAmount = this.services.reduce((total:any, aData:any) => {
+          if (!aData) return total;
+          const cost = parseFloat((aData.serviceId?.serviceType == 1) ? aData.servicePackageId?.cost : aData.subServiceId?.cost) || 0;
+          const calculatedComm = parseFloat((cost * commissionPercent).toFixed(2)) || 0;
+          return ((total * 1) + calculatedComm).toFixed(2);
+        }, 0);
+
+        this.settlementAmount = this.services.reduce((total:any, aData:any) => {
+          if (!aData) return total;
+          const commAmt = parseFloat(aData.commissionData?.amount) || 0;
+          return ((total * 1) + commAmt).toFixed(2);
+        }, 0);
+
+        this.saleAmount = this.services.reduce((total:any, aData:any) => {
+          if (!aData) return total;
+          const cost = parseFloat((aData.serviceId?.serviceType == 1) ? aData.servicePackageId?.cost : aData.subServiceId?.cost) || 0;
+          return ((total * 1) + cost);
+        }, 0);
       });
       this.api.getSubsByVendorAndDate(this.distributorId,date1,date2).subscribe(async res=>{
-        const subsPromises = res.data.map(async (res: any) => {
-          res.commissionData = (await this.api.getAllCommissionBySubscription(res._id).toPromise()).data[0];
+        const subItems = res && res.data ? res.data : [];
+        const subsPromises = subItems.map(async (resItem: any) => {
+          try {
+            let commRes = await this.api.getAllCommissionBySubscription(resItem._id).toPromise();
+            resItem.commissionData = commRes && commRes.data && commRes.data.length > 0 ? commRes.data[0] : null;
+          } catch (err) {
+            console.error('Error fetching commission for sub ' + resItem._id, err);
+            resItem.commissionData = null;
+          }
         });
         await Promise.all(subsPromises);
-        this.plans = res.data;
+        this.plans = subItems;
         setTimeout(() => {
-          if(!this.dataTable1){
+          if(!this.dataTable1 && this.table1 && this.table1.nativeElement){
             this.dataTable1 = $(this.table1.nativeElement);
             this.dataTable1.DataTable({
               "searching":   false,
@@ -219,10 +249,27 @@ export class DetailsComponent implements OnInit {
           }
           
         }, 500);
-        this.commissionAmount = parseFloat(this.commissionAmount) + this.plans.reduce((total:any, aData:any) => ((total*1) + ((aData.planId?.amount) || 0)*1).toFixed(2), 0);
-        this.settlementAmount = parseFloat(this.settlementAmount) + this.plans.reduce((total:any, aData:any) => ((total*1) + ((aData.commissionData?.amount) || 0)*1).toFixed(2), 0);
-        // console.log(this.commissionAmount)
-        this.saleAmount = parseFloat(this.saleAmount) + this.services.reduce((total:any, aData:any) => (((total*1)) + ((aData.planId?.amount) || 0)*1).toFixed(2), 0);
+        
+        const commPlansAmount = this.plans.reduce((total:any, aData:any) => {
+          if (!aData) return total;
+          const amt = parseFloat(aData.planId?.amount) || 0;
+          return ((total * 1) + amt).toFixed(2);
+        }, 0);
+        this.commissionAmount = (parseFloat(this.commissionAmount || 0) + parseFloat(commPlansAmount)).toFixed(2);
+
+        const settlementPlansAmount = this.plans.reduce((total:any, aData:any) => {
+          if (!aData) return total;
+          const amt = parseFloat(aData.commissionData?.amount) || 0;
+          return ((total * 1) + amt).toFixed(2);
+        }, 0);
+        this.settlementAmount = (parseFloat(this.settlementAmount || 0) + parseFloat(settlementPlansAmount)).toFixed(2);
+
+        const salePlansAmount = this.services.reduce((total:any, aData:any) => {
+          if (!aData) return total;
+          const amt = parseFloat(aData.planId?.amount) || 0;
+          return ((total * 1) + amt).toFixed(2);
+        }, 0);
+        this.saleAmount = (parseFloat(this.saleAmount || 0) + parseFloat(salePlansAmount)).toFixed(2);
         this.loading = false;
       });
     }
@@ -230,14 +277,21 @@ export class DetailsComponent implements OnInit {
   getBookings(){
     this.loading = true;
     this.api.getEnquiryByVendor(this.distributorId).subscribe(async res=>{
-      const servicePromises = res.data.map(async (res: any) => {
-        res.commissionData = (await this.api.getAllCommissionByEnquiry(res._id).toPromise()).data[0];
+      const dataItems = res && res.data ? res.data : [];
+      const servicePromises = dataItems.map(async (resItem: any) => {
+        try {
+          let commRes = await this.api.getAllCommissionByEnquiry(resItem._id).toPromise();
+          resItem.commissionData = commRes && commRes.data && commRes.data.length > 0 ? commRes.data[0] : null;
+        } catch (err) {
+          console.error('Error fetching commission for enquiry ' + resItem._id, err);
+          resItem.commissionData = null;
+        }
       });
       await Promise.all(servicePromises);
-      this.services = res.data;
+      this.services = dataItems;
       console.log(this.services)
       setTimeout(() => {
-        if(!this.dataTable){
+        if(!this.dataTable && this.table && this.table.nativeElement){
           this.dataTable = $(this.table.nativeElement);
           this.dataTable.DataTable({
             "searching":   false,
@@ -247,21 +301,44 @@ export class DetailsComponent implements OnInit {
         }
         
       }, 500);
-      this.commissionAmount = this.services.reduce((total:any, aData:any) => ((total*1) + ((parseFloat((((aData.serviceId?.serviceType == 1)?aData.servicePackageId?.cost:aData.subServiceId?.cost) * (this.userData.commission /100)).toFixed(2)) || 0)*1)).toFixed(2), 0);
-      this.settlementAmount = this.services.reduce((total:any, aData:any) => ((total*1) + ((aData.commissionData?.amount) || 0)*1).toFixed(2), 0);
-      // console.log(this.commissionAmount)
-      this.saleAmount = this.services.reduce((total:any, aData:any) => (((total*1)) + (((aData.serviceId?.serviceType == 1)?aData.servicePackageId?.cost:aData.subServiceId?.cost) || 0)*1), 0);
+      
+      const commissionPercent = (this.userData?.commission || 0) / 100;
+      this.commissionAmount = this.services.reduce((total:any, aData:any) => {
+        if (!aData) return total;
+        const cost = parseFloat((aData.serviceId?.serviceType == 1) ? aData.servicePackageId?.cost : aData.subServiceId?.cost) || 0;
+        const calculatedComm = parseFloat((cost * commissionPercent).toFixed(2)) || 0;
+        return ((total * 1) + calculatedComm).toFixed(2);
+      }, 0);
+
+      this.settlementAmount = this.services.reduce((total:any, aData:any) => {
+        if (!aData) return total;
+        const commAmt = parseFloat(aData.commissionData?.amount) || 0;
+        return ((total * 1) + commAmt).toFixed(2);
+      }, 0);
+
+      this.saleAmount = this.services.reduce((total:any, aData:any) => {
+        if (!aData) return total;
+        const cost = parseFloat((aData.serviceId?.serviceType == 1) ? aData.servicePackageId?.cost : aData.subServiceId?.cost) || 0;
+        return ((total * 1) + cost);
+      }, 0);
       this.loading = false;
     });
 
     this.api.getSubsByVendor(this.distributorId).subscribe(async res=>{
-      const subsPromises = res.data.map(async (res: any) => {
-        res.commissionData = (await this.api.getAllCommissionBySubscription(res._id).toPromise()).data[0];
+      const subItems = res && res.data ? res.data : [];
+      const subsPromises = subItems.map(async (resItem: any) => {
+        try {
+          let commRes = await this.api.getAllCommissionBySubscription(resItem._id).toPromise();
+          resItem.commissionData = commRes && commRes.data && commRes.data.length > 0 ? commRes.data[0] : null;
+        } catch (err) {
+          console.error('Error fetching commission for sub ' + resItem._id, err);
+          resItem.commissionData = null;
+        }
       });
       await Promise.all(subsPromises);
-      this.plans = res.data;
+      this.plans = subItems;
       setTimeout(() => {
-        if(!this.dataTable1){
+        if(!this.dataTable1 && this.table1 && this.table1.nativeElement){
           this.dataTable1 = $(this.table1.nativeElement);
           this.dataTable1.DataTable({
             "searching":   false,
@@ -271,10 +348,27 @@ export class DetailsComponent implements OnInit {
         }
         
       }, 500);
-      this.commissionAmount = parseFloat(this.commissionAmount) + this.plans.reduce((total:any, aData:any) => ((total*1) + ((aData.planId?.amount) || 0)*1).toFixed(2), 0);
-      this.settlementAmount = parseFloat(this.settlementAmount) + this.plans.reduce((total:any, aData:any) => ((total*1) + ((aData.commissionData?.amount) || 0)*1).toFixed(2), 0);
-      // console.log(this.commissionAmount)
-      this.saleAmount = parseFloat(this.saleAmount) + this.services.reduce((total:any, aData:any) => (((total*1)) + ((aData.planId?.amount) || 0)*1).toFixed(2), 0);
+      
+      const commPlansAmount = this.plans.reduce((total:any, aData:any) => {
+        if (!aData) return total;
+        const amt = parseFloat(aData.planId?.amount) || 0;
+        return ((total * 1) + amt).toFixed(2);
+      }, 0);
+      this.commissionAmount = (parseFloat(this.commissionAmount || 0) + parseFloat(commPlansAmount)).toFixed(2);
+
+      const settlementPlansAmount = this.plans.reduce((total:any, aData:any) => {
+        if (!aData) return total;
+        const amt = parseFloat(aData.commissionData?.amount) || 0;
+        return ((total * 1) + amt).toFixed(2);
+      }, 0);
+      this.settlementAmount = (parseFloat(this.settlementAmount || 0) + parseFloat(settlementPlansAmount)).toFixed(2);
+
+      const salePlansAmount = this.services.reduce((total:any, aData:any) => {
+        if (!aData) return total;
+        const amt = parseFloat(aData.planId?.amount) || 0;
+        return ((total * 1) + amt).toFixed(2);
+      }, 0);
+      this.saleAmount = (parseFloat(this.saleAmount || 0) + parseFloat(salePlansAmount)).toFixed(2);
       this.loading = false;
     });
   }

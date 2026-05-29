@@ -45,8 +45,14 @@ export const adminMENU: MenuItem[] = [
     link: '/admin/plans',
   },
   {
+    id: 101,
+    label: 'Categories',
+    icon: 'ri-list-check',
+    link: '/admin/categories',
+  },
+  {
     id:10,
-    label: 'Distributors',
+    label: 'Partners',
     icon: 'ri-store-3-line',
     link: '/admin/distributors',
   },

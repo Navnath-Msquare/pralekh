@@ -36,11 +36,11 @@ export class DistributorsComponent implements OnInit {
     * BreadCrumb
     */
      this.breadCrumbItems = [
-      { label: 'Distributors' },
-      { label: 'Distributors List', active: true }
+      { label: 'Partners' },
+      { label: 'Partner List', active: true }
     ];
 
-    this.title.setTitle("Distributors - "+this.appC.title)
+    this.title.setTitle("Partners - "+this.appC.title)
     
      this._fetchData();
 
@@ -66,15 +66,37 @@ view(content:any, id:any){
 
     private _fetchData() {
       this.api.getAllDistributor().subscribe(async data=>{
-        const servicePromises = data.data.map(async (res: any) => {
-          let enquiryData = (await this.api.getEnquiryByVendor(res._id).toPromise()).data;
-          console.log(enquiryData)
-          res.salesAmount = enquiryData.reduce((total:any, aData:any) =>((total*1) + ((parseFloat((((aData.serviceId?.serviceType == 1)?aData.servicePackageId?.cost:aData.subServiceId?.cost))) || 0)*1)).toFixed(2), 0);
-        });
-        await Promise.all(servicePromises);
-        this.data = data.data;
+        if (data && data.data) {
+          const servicePromises = data.data.map(async (res: any) => {
+            try {
+              if (res && res._id) {
+                let response = await this.api.getEnquiryByVendor(res._id).toPromise();
+                let enquiryData = response && response.data ? response.data : [];
+                if (Array.isArray(enquiryData)) {
+                  res.salesAmount = enquiryData.reduce((total:any, aData:any) => {
+                    if (!aData) return total;
+                    const cost = parseFloat((aData.serviceId?.serviceType == 1) ? aData.servicePackageId?.cost : aData.subServiceId?.cost) || 0;
+                    return ((total*1) + cost).toFixed(2);
+                  }, 0);
+                } else {
+                  res.salesAmount = (0).toFixed(2);
+                }
+              } else {
+                res.salesAmount = (0).toFixed(2);
+              }
+            } catch (err) {
+              console.error('Error fetching enquiry for vendor ' + (res ? res._id : ''), err);
+              res.salesAmount = (0).toFixed(2);
+            }
+          });
+          await Promise.all(servicePromises);
+          this.data = data.data;
+        } else {
+          this.data = [];
+        }
+        this.loader = false;
         setTimeout(() => {
-          if(!this.dataTable){
+          if(!this.dataTable && this.table && this.table.nativeElement){
             this.dataTable = $(this.table.nativeElement);
             this.dataTable.DataTable({
               "searching":   false,
@@ -113,8 +135,8 @@ view(content:any, id:any){
 
     delete(id:any) {
       Swal.fire({
-        title: 'You are about to delete a distributor ?',
-        text: 'Deleting your distributor will remove all of your information from our database.',
+        title: 'You are about to delete a partner ?',
+        text: 'Deleting your partner will remove all of your information from our database.',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#f46a6a',
@@ -126,7 +148,7 @@ view(content:any, id:any){
             if (data.status === 'error') {
               this.toast.error(data.message);
             } else {
-              Swal.fire('Deleted!', 'Distributor has been deleted.', 'success');
+              Swal.fire('Deleted!', 'Partner has been deleted.', 'success');
               this._fetchData();
             }
           },error=>{

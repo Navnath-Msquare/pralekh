@@ -1,0 +1,198 @@
+// Premium Step-Indicator Wizard CSS
+
+.step-container {
+  position: relative;
+  width: 100%;
+  padding: 1.5rem 1rem;
+  background: #fdfdfd;
+  border-radius: 12px;
+}
+
+// Background connector line
+.step-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  position: relative;
+  z-index: 1;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 30px; // aligned with the center of step icons
+    left: 8%;
+    right: 8%;
+    height: 4px;
+    background: #e9ecef;
+    border-radius: 10px;
+    z-index: -1;
+  }
+}
+
+.step-item {
+  position: relative;
+  cursor: pointer;
+  padding: 0 10px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    transform: translateY(-3px);
+  }
+
+  // The outer circle wrapper
+  .step-icon-wrapper {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 3px solid #e9ecef;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+
+    .step-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      
+      i {
+        font-size: 28px !important;
+        line-height: 1;
+        display: inline-block;
+      }
+    }
+  }
+
+  .step-title {
+    margin-top: 12px;
+
+    h6 {
+      font-size: 14px;
+      margin-bottom: 4px;
+      transition: color 0.3s ease;
+      color: #495057 !important;
+    }
+
+    .step-status {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      transition: all 0.3s ease;
+    }
+  }
+
+  // Active state style
+  &.active {
+    .step-icon-wrapper {
+      border-color: #4b38b3 !important;
+      background: linear-gradient(135deg, #f5f4ff 0%, #eef0ff 100%) !important;
+      box-shadow: 0 10px 15px -3px rgba(75, 56, 179, 0.2), 0 4px 6px -2px rgba(75, 56, 179, 0.1) !important;
+      transform: scale(1.1);
+      
+      &::after {
+        content: '';
+        position: absolute;
+        inset: -6px;
+        border: 2px solid rgba(75, 56, 179, 0.4);
+        border-radius: 50%;
+        animation: pulse-ring 1.5s infinite;
+      }
+
+      .step-icon i {
+        color: #4b38b3 !important;
+        transform: scale(1.1);
+      }
+    }
+
+    .step-title {
+      h6 {
+        color: #4b38b3 !important;
+        font-weight: 700;
+      }
+      .step-status {
+        background-color: rgba(75, 56, 179, 0.1) !important;
+        color: #4b38b3 !important;
+      }
+    }
+  }
+
+  // Completed state style
+  &.completed {
+    .step-icon-wrapper {
+      border-color: #0ab39c !important;
+      background: linear-gradient(135deg, #e6fffb 0%, #cbfff7 100%) !important;
+      box-shadow: 0 8px 12px -3px rgba(10, 179, 156, 0.15) !important;
+
+      .step-icon i {
+        color: #0ab39c !important;
+      }
+    }
+
+    .step-title {
+      h6 {
+        color: #0ab39c !important;
+      }
+      .step-status {
+        background-color: rgba(10, 179, 156, 0.1) !important;
+        color: #0ab39c !important;
+      }
+    }
+  }
+
+  // Pending (inactive) state style
+  &:not(.active):not(.completed) {
+    .step-icon-wrapper {
+      background-color: #f8f9fa !important;
+      border-color: #e9ecef !important;
+      
+      .step-icon i {
+        color: #adb5bd !important;
+      }
+    }
+
+    .step-title {
+      h6 {
+        color: #878a99 !important;
+      }
+      .step-status {
+        background-color: #f3f3f9 !important;
+        color: #878a99 !important;
+      }
+    }
+  }
+}
+
+// Glowing pulsing animation for active ring
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.95);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(1.15);
+    opacity: 0;
+  }
+}
+
+// Premium visual improvements for inputs in creating view
+.premium-input {
+  border-radius: 8px;
+  border: 1px solid #ced4da;
+  padding: 10px 14px;
+  transition: all 0.2s ease;
+  font-size: 14px;
+
+  &:focus {
+    border-color: #4b38b3;
+    box-shadow: 0 0 0 3px rgba(75, 56, 179, 0.15);
+  }
+}

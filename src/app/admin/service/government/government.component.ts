@@ -46,8 +46,7 @@ export class GovernmentComponent implements OnInit {
       { label: 'Individual and B2B Document List', active: true }
     ];
 
-    this.title.setTitle("Individual and B2B Document - "+this.appC.title)
-
+    this.title.setTitle("Individual and B2B Document - "+this.appC.title);
     
      this._fetchData();
 

@@ -47,8 +47,7 @@ export class PrivateComponent implements OnInit {
       { label: 'Licensing, Support & Consulting List', active: true }
     ];
 
-    this.title.setTitle("Licensing, Support & Consulting - "+this.appC.title)
-
+    this.title.setTitle("Licensing, Support & Consulting - "+this.appC.title);
     
      this._fetchData();
 

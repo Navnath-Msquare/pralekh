@@ -46,7 +46,7 @@ export class PincodesComponent implements OnInit {
   ngOnInit(): void {
     this.breadCrumbItems = [
       { label: 'Home' },
-      { label: 'Distributors'},
+      { label: 'Partners'},
       { label: "Pincodes", active:true}
     ];
     this.route.params.subscribe((data: any) => {

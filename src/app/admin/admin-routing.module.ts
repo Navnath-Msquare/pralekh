@@ -14,6 +14,9 @@ const routes: Routes = [
     component:DashboardComponent
   },
   {
+    path: 'categories', loadChildren: () => import('./categories/categories.module').then(m => m.CategoriesModule)
+  },
+  {
     path: 'distributors', loadChildren: () => import('./distributors/distributors.module').then(m => m.DistributorsModule)
   },
   {
